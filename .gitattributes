@@ -1,0 +1,12 @@
+# normalización por defecto
+* text=auto
+
+# forzar LF para archivos que deben quedar con LF (útil para JSON / JS)
+*.json text eol=lf
+*.js text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+
+# binarios no se tocan
+*.png binary
+*.jpg binary
