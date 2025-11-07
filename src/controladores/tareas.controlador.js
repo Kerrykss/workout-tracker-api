@@ -9,9 +9,16 @@ let tareas = [
   },
 ];
 
-// ✅ Listar todas las tareas
+// ✅ Listar todas las tareas con opción de filtro por status
 export const listarTareas = (req, res) => {
-  res.json(tareas);
+  const { status } = req.query;
+  let resultado = tareas;
+
+  if (status) {
+    resultado = tareas.filter((t) => t.status === status);
+  }
+
+  res.status(200).json(resultado);
 };
 
 // ✅ Obtener tarea por ID
@@ -21,12 +28,22 @@ export const obtenerTareaPorId = (req, res) => {
   if (!tarea) {
     return res.status(404).json({ mensaje: "Tarea no encontrada" });
   }
-  res.json(tarea);
+  res.status(200).json(tarea);
 };
 
 // ✅ Crear nueva tarea
 export const crearTarea = (req, res) => {
   const { description, status } = req.body;
+
+  if (!description || typeof description !== "string") {
+    return res.status(400).json({ mensaje: "Descripción inválida" });
+  }
+
+  const estadosValidos = ["todo", "in-progress", "done"];
+  if (status && !estadosValidos.includes(status)) {
+    return res.status(400).json({ mensaje: "Estado inválido" });
+  }
+
   const nuevaTarea = {
     id: (tareas.length + 1).toString(),
     description,
@@ -48,11 +65,20 @@ export const actualizarTareaPut = (req, res) => {
     return res.status(404).json({ mensaje: "Tarea no encontrada" });
   }
 
+  if (!description || typeof description !== "string") {
+    return res.status(400).json({ mensaje: "Descripción inválida" });
+  }
+
+  const estadosValidos = ["todo", "in-progress", "done"];
+  if (!status || !estadosValidos.includes(status)) {
+    return res.status(400).json({ mensaje: "Estado inválido" });
+  }
+
   tarea.description = description;
   tarea.status = status;
   tarea.updatedAt = new Date().toISOString();
 
-  res.json({ mensaje: "Tarea actualizada completamente", tarea });
+  res.status(200).json({ mensaje: "Tarea actualizada completamente", tarea });
 };
 
 // ✅ Actualización parcial con PATCH
@@ -65,12 +91,21 @@ export const actualizarTareaPatch = (req, res) => {
     return res.status(404).json({ mensaje: "Tarea no encontrada" });
   }
 
+  const estadosValidos = ["todo", "in-progress", "done"];
+  if (description && typeof description !== "string") {
+    return res.status(400).json({ mensaje: "Descripción inválida" });
+  }
+  if (status && !estadosValidos.includes(status)) {
+    return res.status(400).json({ mensaje: "Estado inválido" });
+  }
+
   if (description) tarea.description = description;
   if (status) tarea.status = status;
   tarea.updatedAt = new Date().toISOString();
 
-  res.json({ mensaje: "Tarea actualizada parcialmente", tarea });
+  res.status(200).json({ mensaje: "Tarea actualizada parcialmente", tarea });
 };
+
 // ✅ Eliminar tarea por ID
 export const eliminarTarea = (req, res) => {
   const { id } = req.params;
@@ -81,5 +116,5 @@ export const eliminarTarea = (req, res) => {
   }
 
   const tareaEliminada = tareas.splice(index, 1);
-  res.json({ mensaje: "Tarea eliminada correctamente", tarea: tareaEliminada[0] });
+  res.status(200).json({ mensaje: "Tarea eliminada correctamente", tarea: tareaEliminada[0] });
 };
