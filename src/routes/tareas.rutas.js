@@ -1,10 +1,11 @@
 // src/routes/tareas.rutas.js
 import express from "express";
-import { obtenerTareas } from "../controladores/tareas.controlador.js";
+import { listarTareas, obtenerTareaPorId, crearTarea } from "../controladores/tareas.controlador.js";
 
 const router = express.Router();
 
-// Ruta base: /api/v1/tareas
-router.get("/", obtenerTareas);
+router.get("/", listarTareas);         // GET /api/tareas
+router.get("/:id", obtenerTareaPorId);// GET /api/tareas/:id
+router.post("/", crearTarea);         // POST /api/tareas
 
 export default router;

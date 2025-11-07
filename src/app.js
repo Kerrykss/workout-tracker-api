@@ -1,24 +1,25 @@
-// src/app.js
 import express from "express";
 import dotenv from "dotenv";
-import rutasTareas from "./routes/tareas.rutas.js";
+import tareasRutas from "./routes/tareas.rutas.js"; // 👈 Asegúrate de que exista este archivo
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware para procesar JSON
+// Middleware para parsear JSON
 app.use(express.json());
 
-// Ruta raíz de prueba
+// Ruta raíz
 app.get("/", (req, res) => {
   res.send("Bienvenido a la API Rastreador de Tareas 📝");
 });
 
-// Rutas de tareas
-app.use("/api/v1/tareas", rutasTareas);
+// Registrar rutas de tareas
+app.use("/api/tareas", tareasRutas); // 👈 Aquí conectamos las rutas
+
+// Puerto
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
