@@ -71,3 +71,15 @@ export const actualizarTareaPatch = (req, res) => {
 
   res.json({ mensaje: "Tarea actualizada parcialmente", tarea });
 };
+// ✅ Eliminar tarea por ID
+export const eliminarTarea = (req, res) => {
+  const { id } = req.params;
+
+  const index = tareas.findIndex((t) => t.id === id);
+  if (index === -1) {
+    return res.status(404).json({ mensaje: "Tarea no encontrada" });
+  }
+
+  const tareaEliminada = tareas.splice(index, 1);
+  res.json({ mensaje: "Tarea eliminada correctamente", tarea: tareaEliminada[0] });
+};
