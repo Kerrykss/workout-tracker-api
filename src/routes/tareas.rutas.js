@@ -1,11 +1,22 @@
 // src/routes/tareas.rutas.js
-import express from "express";
-import { listarTareas, obtenerTareaPorId, crearTarea } from "../controladores/tareas.controlador.js";
+import { Router } from "express";
+import {
+  listarTareas,
+  obtenerTareaPorId,
+  crearTarea,
+  actualizarTareaPut,
+  actualizarTareaPatch,
+} from "../controladores/tareas.controlador.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/", listarTareas);         // GET /api/tareas
-router.get("/:id", obtenerTareaPorId);// GET /api/tareas/:id
-router.post("/", crearTarea);         // POST /api/tareas
+// Rutas básicas
+router.get("/", listarTareas);
+router.get("/:id", obtenerTareaPorId);
+router.post("/", crearTarea);
+
+// Rutas de actualización
+router.put("/:id", actualizarTareaPut);
+router.patch("/:id", actualizarTareaPatch);
 
 export default router;
